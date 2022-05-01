@@ -6,8 +6,10 @@ import com.example.teamapt.model.UserAccount;
 /**
  * @author iModupsy
  * @created 18/03/2022
+ *
  */
 public interface UserAccountService {
 
-    UserAccount create(UserRequestDto dto);
+	UserAccount create(UserRequestDto dto);
+
 }

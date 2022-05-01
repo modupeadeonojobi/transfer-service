@@ -17,57 +17,57 @@ import javax.transaction.Transactional;
 @RestController
 public class TransferController {
 
-    @Autowired
-    BalancesRepository balancesRepository;
+	@Autowired
+	BalancesRepository balancesRepository;
 
-    @Autowired
-    TransactionsRepository transactionsRepository;
+	@Autowired
+	TransactionsRepository transactionsRepository;
 
-    @Transactional
-    @PostMapping("transfer")
-    public ResponseEntity<?> transfer(@RequestBody TransferRequest transferRequest){
+	@Transactional
+	@PostMapping("transfer")
+	public ResponseEntity<?> transfer(@RequestBody TransferRequest transferRequest) {
 
-    long tempAccountFrom = transferRequest.getFrom();
-    long tempAccountTo = transferRequest.getTo();
-    double amount = transferRequest.getAmount();
-    if (!balancesRepository.existsByAccount(tempAccountFrom)) {
-        return new ResponseEntity<>("Account: " + tempAccountFrom+ " not found", HttpStatus.BAD_REQUEST);
-    }
-    if (!balancesRepository.existsByAccount(tempAccountTo)) {
-        return new ResponseEntity<>("Account: " + tempAccountTo+ " not found", HttpStatus.BAD_REQUEST);
-    }
+		long tempAccountFrom = transferRequest.getFrom();
+		long tempAccountTo = transferRequest.getTo();
+		double amount = transferRequest.getAmount();
+		if (!balancesRepository.existsByAccount(tempAccountFrom)) {
+			return new ResponseEntity<>("Account: " + tempAccountFrom + " not found",
+					HttpStatus.BAD_REQUEST);
+		}
+		if (!balancesRepository.existsByAccount(tempAccountTo)) {
+			return new ResponseEntity<>("Account: " + tempAccountTo + " not found",
+					HttpStatus.BAD_REQUEST);
+		}
 
-        Balances fromAccount = balancesRepository.findByAccount(tempAccountFrom);
-        Balances toAccount = balancesRepository.findByAccount(tempAccountTo);
+		Balances fromAccount = balancesRepository.findByAccount(tempAccountFrom);
+		Balances toAccount = balancesRepository.findByAccount(tempAccountTo);
 
+		if (fromAccount.getBalance() < amount) {
+			return new ResponseEntity<>("Insufficient fund", HttpStatus.FORBIDDEN);
+		}
+		else {
+			double balance = fromAccount.getBalance();
+			double newBalance = balance - amount;
+			fromAccount.setBalance(newBalance);
+			Balances savedFrom = balancesRepository.save(fromAccount);
 
-    if (fromAccount.getBalance() < amount) {
-        return new ResponseEntity<>("Insufficient fund", HttpStatus.FORBIDDEN);
-    }else {
-        double balance = fromAccount.getBalance();
-        double newBalance = balance - amount;
-        fromAccount.setBalance(newBalance);
-        Balances savedFrom = balancesRepository.save(fromAccount);
+			balance = toAccount.getBalance();
+			newBalance = balance + amount;
+			toAccount.setBalance(newBalance);
+			Balances savedTo = balancesRepository.save(toAccount);
 
+			Transactions newAccount = new Transactions();
+			newAccount.setAccount(tempAccountFrom);
+			newAccount.setAmount(amount);
+			transactionsRepository.save(newAccount);
 
-        balance = toAccount.getBalance();
-        newBalance = balance + amount;
-        toAccount.setBalance(newBalance);
-        Balances savedTo = balancesRepository.save(toAccount);
+			if (savedFrom != null && savedTo != null) {
+				return new ResponseEntity<>("Transfer Successful", HttpStatus.OK);
+			}
 
+		}
 
-        Transactions newAccount = new Transactions();
-        newAccount.setAccount(tempAccountFrom);
-        newAccount.setAmount(amount);
-        transactionsRepository.save(newAccount);
+		return new ResponseEntity<>("transaction failed", HttpStatus.FORBIDDEN);
+	}
 
-
-        if (savedFrom != null && savedTo != null){
-            return new ResponseEntity<>("Transfer Successful", HttpStatus.OK);
-        }
-
-    }
-
-    return new ResponseEntity<>("transaction failed", HttpStatus.FORBIDDEN);
-    }
 }

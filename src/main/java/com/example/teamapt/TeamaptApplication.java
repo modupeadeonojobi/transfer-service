@@ -9,4 +9,5 @@ public class TeamaptApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TeamaptApplication.class, args);
 	}
+
 }

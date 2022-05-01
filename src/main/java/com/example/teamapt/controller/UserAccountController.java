@@ -1,7 +1,9 @@
 package com.example.teamapt.controller;
 
+import com.example.teamapt.constant.ApiRoute;
 import com.example.teamapt.dto.UserRequestDto;
 import com.example.teamapt.service.UserAccountService;
+import com.example.teamapt.util.JsonResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +16,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping(value = ApiRoute.API)
 @AllArgsConstructor
 public class UserAccountController {
 
-    private UserAccountService userAccountService;
+	private UserAccountService userAccountService;
 
-    @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody UserRequestDto dto) {
-        return new ResponseEntity<>(userAccountService.create(dto), HttpStatus.CREATED);
-    }
+	@PostMapping(value = ApiRoute.REGISTER)
+	public ResponseEntity<?> signUp(@RequestBody UserRequestDto dto) {
+		userAccountService.create(dto);
+		return new ResponseEntity<>(new JsonResponse(HttpStatus.CREATED, true,
+				"User registered successfully"), HttpStatus.CREATED);
+	}
 
-    @GetMapping("/secured-endpoint")
-    public ResponseEntity<?> securedAPI() {
-        return new ResponseEntity<>("This is a secured API", HttpStatus.OK);
-    }
+	@GetMapping("/auth/secured-endpoint")
+	public ResponseEntity<?> securedAPI() {
+		return new ResponseEntity<>(
+				new JsonResponse(HttpStatus.CREATED, true, "This is a secured API"),
+				HttpStatus.OK);
+	}
+
 }

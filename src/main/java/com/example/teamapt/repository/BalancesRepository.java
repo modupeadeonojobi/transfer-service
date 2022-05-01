@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BalancesRepository extends JpaRepository<Balances, Long> {
 
-    boolean existsByAccount(long account);
+	boolean existsByAccount(long account);
 
-    Balances findByAccount(long balance);
+	Balances findByAccount(long balance);
 
 }

@@ -8,12 +8,10 @@ import lombok.Data;
  */
 
 @Data
-public class UserRequestDto {
+public class LoginDto {
 
 	private String email;
 
 	private String password;
-
-	private String role;
 
 }

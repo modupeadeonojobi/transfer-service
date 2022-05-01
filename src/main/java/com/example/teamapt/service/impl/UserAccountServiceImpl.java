@@ -17,15 +17,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private UserAccountRepository userAccountRepository;
+	private UserAccountRepository userAccountRepository;
 
-    private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
-    @Override
-    public UserAccount create(UserRequestDto dto) {
-        UserAccount user = new UserAccount();
-        user.setUsername(dto.getUsername());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        return userAccountRepository.save(user);
-    }
+	@Override
+	public UserAccount create(UserRequestDto dto) {
+		UserAccount user = new UserAccount();
+		user.setEmail(dto.getEmail());
+		user.setRole(dto.getRole());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		return userAccountRepository.save(user);
+	}
+
 }
