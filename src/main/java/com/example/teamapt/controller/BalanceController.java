@@ -2,15 +2,18 @@ package com.example.teamapt.controller;
 
 import com.example.teamapt.model.Balances;
 import com.example.teamapt.repository.BalancesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@AllArgsConstructor
 public class BalanceController {
 
-	@Autowired
 	private BalancesRepository balancesRepository;
 
 	@PostMapping("/create-balance/{account}/{balance}")

@@ -5,6 +5,7 @@ import com.example.teamapt.model.Transactions;
 import com.example.teamapt.model.TransferRequest;
 import com.example.teamapt.repository.BalancesRepository;
 import com.example.teamapt.repository.TransactionsRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.transaction.Transactional;
 
 @RestController
+@AllArgsConstructor
 public class TransferController {
 
-	@Autowired
-	BalancesRepository balancesRepository;
+	private BalancesRepository balancesRepository;
 
-	@Autowired
-	TransactionsRepository transactionsRepository;
+	private TransactionsRepository transactionsRepository;
 
 	@Transactional
 	@PostMapping("transfer")
