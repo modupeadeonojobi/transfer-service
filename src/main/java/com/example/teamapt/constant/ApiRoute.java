@@ -14,4 +14,5 @@ public interface ApiRoute {
 
 	String REGISTER = "/register";
 
+    String SECURED_ENDPOINT = "/secured-endpoint";
 }

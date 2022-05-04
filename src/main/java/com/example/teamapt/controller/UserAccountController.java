@@ -29,7 +29,7 @@ public class UserAccountController {
 				"User registered successfully"), HttpStatus.CREATED);
 	}
 
-	@GetMapping("/auth/secured-endpoint")
+	@GetMapping(value = ApiRoute.AUTH + ApiRoute.SECURED_ENDPOINT)
 	public ResponseEntity<?> securedAPI() {
 		return new ResponseEntity<>(
 				new JsonResponse(HttpStatus.CREATED, true, "This is a secured API"),
